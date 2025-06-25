@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - ResolveNow</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .stats-card {
+      transition: transform 0.3s;
+    }
+    .stats-card:hover {
+      transform: translateY(-5px);
+    }
+    .status-badge {
+      padding: 0.35em 0.65em;
+      font-size: 0.75em;
+      font-weight: 600;
+      border-radius: 0.25rem;
+    }
+    .badge-pending {
+      background-color: #ffc107;
+      color: #000;
+    }
+    .badge-in-progress {
+      background-color: #0dcaf0;
+      color: #000;
+    }
+    .badge-resolved {
+      background-color: #198754;
+      color: #fff;
+    }
+    .badge-rejected {
+      background-color: #dc3545;
+      color: #fff;
+    }
+    .action-btn {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      margin-right: 0.25rem;
+    }
+    .status-dropdown .dropdown-menu {
+      min-width: 8rem;
+    }
+    .status-dropdown .dropdown-item {
+      padding: 0.25rem 1rem;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">ResolveNow</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="admin.html" id="adminBtn">Admin Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="login.html">Manage Users</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html" id="logoutBtn">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid mt-4">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <img src="C:\Users\Lenovo\Desktop\resolve-now\client\public\images\images.jpeg" class="rounded-circle mb-3" alt="Profile">
+            <h5 id="adminName">Admin User</h5>
+            <p class="text-muted">Administrator</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            Admin Menu
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><a href="admin.html">Dashboard</a></li>
+            <li class="list-group-item"><a href="dashboard.html">Manage Complaints</a></li>
+            <li class="list-group-item"><a href="dashboard.html">Manage Users</a></li>
+            <li class="list-group-item"><a href="complaint.html">Reports</a></li>
+            
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <div class="row mb-4">
+          <div class="col-md-4">
+            <div class="card text-white bg-success mb-3 stats-card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="card-title">Total Complaints</h6>
+                    <h2 id="totalComplaints">0</h2>
+                  </div>
+                  <i class="fas fa-clipboard-list fa-3x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card text-white bg-warning mb-3 stats-card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="card-title">Pending Complaints</h6>
+                    <h2 id="pendingComplaints">0</h2>
+                  </div>
+                  <i class="fas fa-clock fa-3x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card text-white bg-danger mb-3 stats-card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="card-title">Rejected Complaints</h6>
+                    <h2 id="rejectedComplaints">0</h2>
+                  </div>
+                  <i class="fas fa-times-circle fa-3x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card mb-4">
+          <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">All Complaints</h5>
+            <div class="dropdown">
+              <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown">
+                Filter by Status
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#" data-status="all">All</a></li>
+                <li><a class="dropdown-item" href="#" data-status="Pending">Pending</a></li>
+                <li><a class="dropdown-item" href="#" data-status="In Progress">In Progress</a></li>
+                <li><a class="dropdown-item" href="#" data-status="Resolved">Resolved</a></li>
+                <li><a class="dropdown-item" href="#" data-status="Rejected">Rejected</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>User</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Assigned To</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="allComplaintsTable">
+                  <!-- All complaints will be loaded here via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Complaint Details Modal -->
+  <div class="modal fade" id="complaintDetailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Complaint Details</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="complaintDetailsContent">
+          <!-- Complaint details will be loaded here -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if user is admin (in real app, this would come from authentication)
+      const isAdmin = true; // For demo purposes, always true
+      
+      // Load complaints from localStorage
+      const complaints = JSON.parse(localStorage.getItem('complaints')) || [];
+      
+      // Update statistics
+      updateComplaintStats(complaints);
+      
+      // Display all complaints
+      displayComplaints(complaints, isAdmin);
+      
+      // Set up filter functionality
+      setupFilters(isAdmin);
+      
+      // Set up view button functionality
+      setupViewButtons(isAdmin);
+    });
+
+    function updateComplaintStats(complaints) {
+      // Update the stats cards
+      document.getElementById('totalComplaints').textContent = complaints.length;
+      document.getElementById('pendingComplaints').textContent = 
+        complaints.filter(c => c.status === 'Pending').length;
+      document.getElementById('rejectedComplaints').textContent = 
+        complaints.filter(c => c.status === 'Rejected').length;
+    }
+
+    function displayComplaints(complaintsToDisplay, isAdmin) {
+      const tableBody = document.getElementById('allComplaintsTable');
+      
+      if (complaintsToDisplay.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="8" class="text-center py-4">
+              <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+              <h5>No complaints found</h5>
+              <p class="text-muted">There are no complaints to display</p>
+            </td>
+          </tr>
+        `;
+      } else {
+        tableBody.innerHTML = complaintsToDisplay.map((complaint, index) => `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${complaint.title}</td>
+            <td>${complaint.user}</td>
+            <td>${complaint.category}</td>
+            <td><span class="badge ${getStatusClass(complaint.status)}">${complaint.status}</span></td>
+            <td>${complaint.assignedTo || 'Not assigned'}</td>
+            <td>${new Date(complaint.createdAt || complaint.date).toLocaleDateString()}</td>
+            <td>
+              <button class="btn btn-sm btn-primary action-btn view-btn" data-id="${complaint.id}">
+                <i class="fas fa-eye"></i> View
+              </button>
+              ${isAdmin ? `
+              <div class="dropdown d-inline-block status-dropdown">
+                <button class="btn btn-sm btn-secondary action-btn dropdown-toggle" type="button" 
+                  id="statusDropdown${complaint.id}" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="fas fa-edit"></i> Status
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="statusDropdown${complaint.id}">
+                  <li><a class="dropdown-item status-change" href="#" data-id="${complaint.id}" data-status="Pending">Pending</a></li>
+                  <li><a class="dropdown-item status-change" href="#" data-id="${complaint.id}" data-status="In Progress">In Progress</a></li>
+                  <li><a class="dropdown-item status-change" href="#" data-id="${complaint.id}" data-status="Resolved">Resolved</a></li>
+                  <li><a class="dropdown-item status-change" href="#" data-id="${complaint.id}" data-status="Rejected">Rejected</a></li>
+                </ul>
+              </div>
+              ` : ''}
+            </td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    function getStatusClass(status) {
+      switch(status) {
+        case 'Pending': return 'badge-pending';
+        case 'In Progress': return 'badge-in-progress';
+        case 'Resolved': return 'badge-resolved';
+        case 'Rejected': return 'badge-rejected';
+        default: return 'bg-secondary';
+      }
+    }
+
+    function setupFilters(isAdmin) {
+      document.querySelectorAll('.dropdown-item[data-status]').forEach(item => {
+        item.addEventListener('click', function(e) {
+          e.preventDefault();
+          const status = this.getAttribute('data-status');
+          filterComplaints(status, isAdmin);
+        });
+      });
+    }
+
+    function filterComplaints(status, isAdmin) {
+      const complaints = JSON.parse(localStorage.getItem('complaints')) || [];
+      const filtered = status === 'all' 
+        ? complaints 
+        : complaints.filter(c => c.status === status);
+      
+      displayComplaints(filtered, isAdmin);
+    }
+
+    function setupViewButtons(isAdmin) {
+      document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('view-btn') || e.target.closest('.view-btn')) {
+          const btn = e.target.classList.contains('view-btn') ? e.target : e.target.closest('.view-btn');
+          const complaintId = parseInt(btn.getAttribute('data-id'));
+          const complaints = JSON.parse(localStorage.getItem('complaints')) || [];
+          const complaint = complaints.find(c => c.id === complaintId);
+          
+          if (complaint) {
+            const modalContent = document.getElementById('complaintDetailsContent');
+            modalContent.innerHTML = `
+              <h4>${complaint.title}</h4>
+              <div class="row mt-3">
+                <div class="col-md-6">
+                  <p><strong>User:</strong> ${complaint.user}</p>
+                  <p><strong>Category:</strong> ${complaint.category}</p>
+                  <p><strong>Priority:</strong> ${complaint.priority || 'Not specified'}</p>
+                </div>
+                <div class="col-md-6">
+                  <p><strong>Status:</strong> <span class="badge ${getStatusClass(complaint.status)}">${complaint.status}</span></p>
+                  <p><strong>Date Submitted:</strong> ${new Date(complaint.createdAt || complaint.date).toLocaleString()}</p>
+                  <p><strong>Assigned To:</strong> ${complaint.assignedTo || 'Not assigned'}</p>
+                </div>
+              </div>
+              <hr>
+              <h5>Description</h5>
+              <p>${complaint.description}</p>
+              ${isAdmin ? `
+              <hr>
+              <h5>Admin Actions</h5>
+              <div class="btn-group">
+                <button class="btn btn-sm btn-warning status-action" data-status="Pending">
+                  Set Pending
+                </button>
+                <button class="btn btn-sm btn-info status-action" data-status="In Progress">
+                  Set In Progress
+                </button>
+                <button class="btn btn-sm btn-success status-action" data-status="Resolved">
+                  Resolve
+                </button>
+                <button class="btn btn-sm btn-danger status-action" data-status="Rejected">
+                  Reject
+                </button>
+              </div>
+              <input type="hidden" id="currentComplaintId" value="${complaint.id}">
+              ` : ''}
+            `;
+            
+            const modal = new bootstrap.Modal(document.getElementById('complaintDetailsModal'));
+            modal.show();
+            
+            // Set up status change buttons in modal if admin
+            if (isAdmin) {
+              document.querySelectorAll('.status-action').forEach(btn => {
+                btn.addEventListener('click', function() {
+                  const newStatus = this.getAttribute('data-status');
+                  const complaintId = parseInt(document.getElementById('currentComplaintId').value);
+                  updateComplaintStatus(complaintId, newStatus);
+                  modal.hide();
+                });
+              });
+            }
+          }
+        }
+        
+        // Handle status changes from table dropdown
+        if (e.target.classList.contains('status-change') || e.target.closest('.status-change')) {
+          e.preventDefault();
+          const link = e.target.classList.contains('status-change') ? e.target : e.target.closest('.status-change');
+          const complaintId = parseInt(link.getAttribute('data-id'));
+          const newStatus = link.getAttribute('data-status');
+          updateComplaintStatus(complaintId, newStatus);
+        }
+      });
+    }
+
+    function updateComplaintStatus(complaintId, newStatus) {
+      let complaints = JSON.parse(localStorage.getItem('complaints')) || [];
+      const complaintIndex = complaints.findIndex(c => c.id === complaintId);
+      
+      if (complaintIndex !== -1) {
+        // Update the complaint status
+        complaints[complaintIndex].status = newStatus;
+        complaints[complaintIndex].updatedAt = new Date().toISOString();
+        
+        // Save back to localStorage
+        localStorage.setItem('complaints', JSON.stringify(complaints));
+        
+        // Update the display
+        updateComplaintStats(complaints);
+        displayComplaints(complaints, true); // Refresh table
+        
+        // Show success message
+        alert(`Complaint status updated to ${newStatus}`);
+      }
+    }
+  </script>
+</body>
+</html>
