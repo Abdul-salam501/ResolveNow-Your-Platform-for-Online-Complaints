@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - ResolveNow</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <style>
+    /* Custom styles for dashboard */
+    .profile-card {
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .profile-img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+    }
+    .quick-links-card {
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .complaints-card {
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .updates-card {
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .status-badge {
+      padding: 0.35em 0.65em;
+      font-size: 0.75em;
+      font-weight: 600;
+      border-radius: 0.25rem;
+      text-transform: uppercase;
+    }
+    .badge-pending {
+      background-color: #ffc107;
+      color: #000;
+    }
+    .badge-in-progress {
+      background-color: #0dcaf0;
+      color: #000;
+    }
+    .badge-resolved {
+      background-color: #198754;
+      color: #fff;
+    }
+    .badge-rejected {
+      background-color: #dc3545;
+      color: #fff;
+    }
+    .action-btn {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      margin-right: 0.25rem;
+    }
+    .table-hover tbody tr:hover {
+      background-color: rgba(13, 110, 253, 0.05);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">ResolveNow</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="dashboard.html"><i class="fas fa-tachometer-alt me-1"></i> Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="complaint.html"><i class="fas fa-plus-circle me-1"></i> New Complaint</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html" id="logoutBtn"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container mt-4">
+    <div class="row">
+      <!-- Sidebar Column -->
+      <div class="col-md-3">
+        <!-- Profile Card -->
+        <div class="card profile-card mb-4">
+          <div class="card-body text-center">
+            <img src="https://via.placeholder.com/150" class="rounded-circle profile-img mb-3" alt="Profile">
+            <h5 id="userName">DON</h5>
+            <p class="text-muted mb-0">Customer</p>
+            <p class="text-muted small">Member since JUNE 2025</p>
+          </div>
+        </div>
+        
+        <!-- Quick Links Card -->
+        <div class="card quick-links-card">
+          <div class="card-header bg-primary text-white">
+            <i class="fas fa-link me-2"></i>Quick Links
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <a href="dashboard.html" class="text-decoration-none"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
+            </li>
+            <li class="list-group-item">
+              <a href="complaint.html" class="text-decoration-none"><i class="fas fa-plus-circle me-2"></i>New Complaint</a>
+            </li>
+            <li class="list-group-item">
+              <a href="#" class="text-decoration-none"><i class="fas fa-user me-2"></i>My Profile</a>
+            </li>
+            <li class="list-group-item">
+              <a href="#" class="text-decoration-none"><i class="fas fa-cog me-2"></i>Settings</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Main Content Column -->
+      <div class="col-md-9">
+        <!-- Complaints Card -->
+        <div class="card complaints-card mb-4">
+          <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="fas fa-list-alt me-2"></i>My Complaints</h5>
+            <a href="complaint.html" class="btn btn-light btn-sm">
+              <i class="fas fa-plus me-1"></i>New Complaint
+            </a>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="complaintsTable">
+                  <!-- Complaints will be loaded here via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Updates Card -->
+        <div class="card updates-card">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-bell me-2"></i>Recent Updates</h5>
+          </div>
+          <div class="card-body">
+            <div id="updatesList" class="list-group">
+              <!-- Updates will be loaded here via JavaScript -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Dashboard Data Handling -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get current user (for filtering)
+      const currentUser = 'John Doe'; // In real app, get from auth system
+      
+      // Get complaints from localStorage
+      const complaints = JSON.parse(localStorage.getItem('complaints')) || [];
+      
+      // Filter complaints for current user
+      const userComplaints = complaints.filter(complaint => complaint.user === currentUser);
+      
+      // Display complaints in table
+      const tableBody = document.getElementById('complaintsTable');
+      
+      if (userComplaints.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="6" class="text-center py-4">
+              <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+              <h5>No complaints found</h5>
+              <p class="text-muted">You haven't submitted any complaints yet</p>
+              <a href="complaint.html" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i>File New Complaint
+              </a>
+            </td>
+          </tr>
+        `;
+      } else {
+        tableBody.innerHTML = userComplaints.map(complaint => `
+          <tr>
+            <td>${complaint.id}</td>
+            <td>${complaint.title}</td>
+            <td>${complaint.category}</td>
+            <td>
+              <span class="status-badge ${getStatusBadgeClass(complaint.status)}">
+                ${complaint.status}
+              </span>
+            </td>
+            <td>${complaint.date}</td>
+            <td>
+              <button class="btn btn-sm btn-primary action-btn view-btn" data-id="${complaint.id}">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="btn btn-sm btn-danger action-btn delete-btn" data-id="${complaint.id}">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      }
+      
+      // Status badge styling function
+      function getStatusBadgeClass(status) {
+        switch(status) {
+          case 'Pending': return 'badge-pending';
+          case 'In Progress': return 'badge-in-progress';
+          case 'Resolved': return 'badge-resolved';
+          case 'Rejected': return 'badge-rejected';
+          default: return 'bg-secondary';
+        }
+      }
+      
+      // View button click handler
+      document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const complaintId = parseInt(this.getAttribute('data-id'));
+          const complaint = userComplaints.find(c => c.id === complaintId);
+          
+          if (complaint) {
+            // Create modal with complaint details
+            const modalHTML = `
+              <div class="modal fade" id="complaintModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                      <h5 class="modal-title">Complaint Details</h5>
+                      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <h4>${complaint.title}</h4>
+                      <div class="row mt-3">
+                        <div class="col-md-6">
+                          <p><strong>Category:</strong> ${complaint.category}</p>
+                          <p><strong>Priority:</strong> ${complaint.priority}</p>
+                        </div>
+                        <div class="col-md-6">
+                          <p><strong>Status:</strong> <span class="badge ${getStatusBadgeClass(complaint.status)}">${complaint.status}</span></p>
+                          <p><strong>Date Submitted:</strong> ${complaint.date}</p>
+                        </div>
+                      </div>
+                      <hr>
+                      <h5>Description</h5>
+                      <p>${complaint.description}</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+            
+            // Add modal to DOM
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('complaintModal'));
+            modal.show();
+            
+            // Remove modal from DOM after it's closed
+            document.getElementById('complaintModal').addEventListener('hidden.bs.modal', function() {
+              this.remove();
+            });
+          }
+        });
+      });
+      
+      // Delete button click handler
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const complaintId = parseInt(this.getAttribute('data-id'));
+          if (confirm('Are you sure you want to delete this complaint?')) {
+            // Filter out the complaint to be deleted
+            const updatedComplaints = complaints.filter(c => c.id !== complaintId);
+            
+            // Save back to localStorage
+            localStorage.setItem('complaints', JSON.stringify(updatedComplaints));
+            
+            // Reload the page to reflect changes
+            window.location.reload();
+          }
+        });
+      });
+      
+      // Load recent updates (placeholder)
+      const updatesList = document.getElementById('updatesList');
+      updatesList.innerHTML = `
+        <div class="list-group-item">
+          <div class="d-flex w-100 justify-content-between">
+            <h6 class="mb-1">System Update</h6>
+            <small class="text-muted">Today</small>
+          </div>
+          <p class="mb-1">New complaint submission system is now live!</p>
+        </div>
+        <div class="list-group-item">
+          <div class="d-flex w-100 justify-content-between">
+            <h6 class="mb-1">Maintenance</h6>
+            <small class="text-muted">2 days ago</small>
+          </div>
+          <p class="mb-1">Scheduled maintenance completed successfully.</p>
+        </div>
+      `;
+    });
+  </script>
+</body>
+</html>
